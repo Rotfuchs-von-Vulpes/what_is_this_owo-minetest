@@ -1,4 +1,6 @@
 local what_is_this_owo = {}
+what_is_this_owo.players = {}
+what_is_this_owo.players_set = {}
 
 local function split (str, sep)
 	if sep == nil then
@@ -117,6 +119,20 @@ function string_to_pixels(str)
 	return size
 end
 
+function what_is_this_owo.register_player(player, name)
+	if not what_is_this_owo.players_set[name] then
+		table.insert(what_is_this_owo.players, player)
+		what_is_this_owo.players_set[name] = #what_is_this_owo.players
+	end
+end
+
+function what_is_this_owo.remove_player(player, name)
+	if what_is_this_owo.players_set[name] then
+		table.remove(what_is_this_owo.players, what_is_this_owo.players_set[name])
+		what_is_this_owo.players_set[name] = nil
+	end
+end
+
 function what_is_this_owo.get_pointed_thing(player)
 	-- get player position
 	local player_pos = player:get_pos()
@@ -204,9 +220,7 @@ function what_is_this_owo.get_node_tile(node_name)
 	return tile, item_type, minetest.registered_nodes[node_name]
 end
 
-function what_is_this_owo.show_background(player)
-	local meta = player:get_meta()
-
+function what_is_this_owo.show_background(player, meta)
 	player:hud_change(
 		meta:get_string('wit:background_left'),
 		'text',
@@ -224,11 +238,9 @@ function what_is_this_owo.show_background(player)
 	)
 end
 
-function what_is_this_owo.show(player, form_view, node_description, node_name, item_type, mod_name)
-	local meta = player:get_meta()
-
+function what_is_this_owo.show(player, meta, form_view, node_description, node_name, item_type, mod_name)
 	if meta:get_string('wit:pointed_thing') == 'ignore' then
-		what_is_this_owo.show_background(player)
+		what_is_this_owo.show_background(player, meta)
 	end
 
 	meta:set_string('wit:pointed_thing', node_name)
@@ -289,10 +301,8 @@ function what_is_this_owo.show(player, form_view, node_description, node_name, i
 	end
 end
 
-function what_is_this_owo.unshow(player)
-	local meta = player:get_meta()
-
-	meta:set_string('pointed_thing', 'ignore')
+function what_is_this_owo.unshow(player, meta)
+	meta:set_string('wit:pointed_thing', 'ignore')
 
 	player:hud_change(
 		meta:get_string('wit:background_left'),
