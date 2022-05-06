@@ -62,14 +62,12 @@ minetest.register_on_joinplayer(function(player)
 	what_is_this_owo.register_player(player, player:get_player_name())
 end)
 
-minetest.register_globalstep(function()
-	for _, player in ipairs(what_is_this_owo.players) do
+minetest.register_on_punchnode(function(pos, node, player, pointed_thing)
+	if what_is_this_owo.players_set[player:get_player_name()] then
 		local meta = player:get_meta()
+		local node_name = node.name
 
-		local pointed_thing = what_is_this_owo.get_pointed_thing(player, meta)
-
-		if pointed_thing then
-			local node_name = minetest.get_node(pointed_thing.under).name
+		if meta:get_string('wit:pointed_thing') ~= node_name then
 			local form_view, item_type, node_definition = what_is_this_owo.get_node_tile(node_name, meta)
 
 			if not node_definition then
@@ -81,9 +79,7 @@ minetest.register_globalstep(function()
 			local node_description = what_is_this_owo.destrange(node_definition.description)
 			local mod_name, _ = what_is_this_owo.split_item_name(node_name)
 
-			if meta:get_string('wit:pointed_thing') ~= node_name then
-				what_is_this_owo.show(player, meta, form_view, node_description, node_name, item_type, mod_name)
-			end
+			what_is_this_owo.show(player, meta, form_view, node_description, node_name, item_type, mod_name)
 		else
 			what_is_this_owo.unshow(player, meta)
 		end

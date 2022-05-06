@@ -1,6 +1,7 @@
-local what_is_this_owo = {}
-what_is_this_owo.players = {}
-what_is_this_owo.players_set = {}
+local what_is_this_owo = {
+	players = {},
+	players_set = {}
+}
 
 local function split (str, sep)
 	if sep == nil then
@@ -131,40 +132,6 @@ function what_is_this_owo.remove_player(player, name)
 		table.remove(what_is_this_owo.players, what_is_this_owo.players_set[name])
 		what_is_this_owo.players_set[name] = nil
 	end
-end
-
-function what_is_this_owo.get_pointed_thing(player)
-	-- get player position
-	local player_pos = player:get_pos()
-	local eye_height = player:get_properties().eye_height
-	local eye_offset = player:get_eye_offset()
-	player_pos.y = player_pos.y + eye_height
-	player_pos = vector.add(player_pos, eye_offset)
-
-	-- set liquids vision
-	local see_liquid = 
-		minetest.registered_nodes[minetest.get_node(player_pos).name].drawtype ~= 'liquid'
-	
-	-- get wielded item range 5 is engine default
-	-- order tool/item range >> hand_range >> fallback 5
-	local tool_range = player:get_wielded_item():get_definition().range or nil					
-	local hand_range	
-		for key, val in pairs(minetest.registered_items) do								
-			if key == "" then
-				hand_range = val.range or nil
-			end
-		end
-	local wield_range = tool_range or hand_range or 5
-	
-	-- determine ray end position
-	local look_dir = player:get_look_dir()
-	look_dir = vector.multiply(look_dir, wield_range)
-	local end_pos = vector.add(look_dir, player_pos)
-
-	-- get pointed_thing
-	local ray = minetest.raycast(player_pos, end_pos, false, see_liquid)
-
-	return ray:next()
 end
 
 function what_is_this_owo.get_node_tile(node_name)
