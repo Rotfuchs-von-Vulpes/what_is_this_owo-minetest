@@ -120,21 +120,19 @@ function string_to_pixels(str)
 	return size
 end
 
-function what_is_this_owo.register_player(player, name)
+function what_is_this_owo.register_player(name)
 	if not what_is_this_owo.players_set[name] then
-		table.insert(what_is_this_owo.players, player)
-		what_is_this_owo.players_set[name] = #what_is_this_owo.players
+		what_is_this_owo.players_set[name] = true
 	end
 end
 
-function what_is_this_owo.remove_player(player, name)
+function what_is_this_owo.remove_player(name)
 	if what_is_this_owo.players_set[name] then
-		table.remove(what_is_this_owo.players, what_is_this_owo.players_set[name])
 		what_is_this_owo.players_set[name] = nil
 	end
 end
 
-function what_is_this_owo.get_node_tile(node_name)
+function what_is_this_owo.get_node_tiles(node_name)
 	local node = minetest.registered_nodes[node_name]
 
 	if not node then

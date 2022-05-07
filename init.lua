@@ -57,9 +57,12 @@ minetest.register_on_joinplayer(function(player)
 	meta:set_string('wit:mod', mod_id)
 	meta:set_string('wit:pointed_thing', 'ignore')
 	meta:set_string('wit:item_type_in_pointer', 'node')
-	meta:set_string('wit:show_popup', 'true')
 
 	what_is_this_owo.register_player(player, player:get_player_name())
+end)
+
+minetest.register_on_leaveplayer(function(player)
+	what_is_this_owo.remove_player(player:get_player_name())
 end)
 
 minetest.register_on_punchnode(function(pos, node, player, pointed_thing)
@@ -68,7 +71,7 @@ minetest.register_on_punchnode(function(pos, node, player, pointed_thing)
 		local node_name = node.name
 
 		if meta:get_string('wit:pointed_thing') ~= node_name then
-			local form_view, item_type, node_definition = what_is_this_owo.get_node_tile(node_name, meta)
+			local form_view, item_type, node_definition = what_is_this_owo.get_node_tiles(node_name, meta)
 
 			if not node_definition then
 				what_is_this_owo.unshow(player, meta)
@@ -93,10 +96,10 @@ minetest.register_chatcommand('witowo', {
 		local player = minetest.get_player_by_name(name)
 
 		if what_is_this_owo.players_set[name] then
-			what_is_this_owo.remove_player(player, name)
+			what_is_this_owo.remove_player(name)
 			what_is_this_owo.unshow(player, player:get_meta())
 		else
-			what_is_this_owo.register_player(player, name)
+			what_is_this_owo.register_player(name)
 		end
 
 		return true, 'Option flipped'
