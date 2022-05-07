@@ -17,7 +17,7 @@ A mod that says at the top of your screen what you're looking at.
 To unshow thw pop-up, typed this in console:
 
 ```
-/witowo
+/wituwu
 ```
 
 And typed again to show.
