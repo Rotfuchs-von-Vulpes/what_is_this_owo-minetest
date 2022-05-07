@@ -62,27 +62,32 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	what_is_this_uwu.remove_player(player:get_player_name())
+	what_is_this_uwu.remove_player(player, player:get_player_name())
 end)
 
-minetest.register_on_punchnode(function(pos, node, player, pointed_thing)
-	if what_is_this_uwu.players_set[player:get_player_name()] then
+minetest.register_globalstep(function()
+	for _, player in ipairs(what_is_this_uwu.players) do
 		local meta = player:get_meta()
-		local node_name = node.name
+		local pointed_thing = what_is_this_uwu.get_pointed_thing(player)
 
-		if meta:get_string('wit:pointed_thing') ~= node_name then
-			local form_view, item_type, node_definition = what_is_this_uwu.get_node_tiles(node_name, meta)
+		if pointed_thing then
+			local node = minetest.get_node(pointed_thing.under)
+			local node_name = node.name
 
-			if not node_definition then
-				what_is_this_uwu.unshow(player, meta)
+			if meta:get_string('wit:pointed_thing') ~= node_name then
+				local form_view, item_type, node_definition = what_is_this_uwu.get_node_tiles(node_name, meta)
 
-				return
+				if not node_definition then
+					what_is_this_uwu.unshow(player, meta)
+
+					return
+				end
+
+				local node_description = what_is_this_uwu.destrange(node_definition.description)
+				local mod_name, _ = what_is_this_uwu.split_item_name(node_name)
+
+				what_is_this_uwu.show(player, meta, form_view, node_description, node_name, item_type, mod_name)
 			end
-
-			local node_description = what_is_this_uwu.destrange(node_definition.description)
-			local mod_name, _ = what_is_this_uwu.split_item_name(node_name)
-
-			what_is_this_uwu.show(player, meta, form_view, node_description, node_name, item_type, mod_name)
 		else
 			what_is_this_uwu.unshow(player, meta)
 		end

@@ -1,10 +1,6 @@
-# What is this? OwO
+# What is this? UwU
 
 A mod that says at the top of your screen what you're looking at.
-
-## version 1.1:
-
-globastep has been removed for consuming too many resources, now it is necessary to punch the block to show the name.
 
 ## Screenshots:
 
@@ -13,6 +9,8 @@ globastep has been removed for consuming too many resources, now it is necessary
 ![](./textures/bed.png)
 
 ![](./textures/door.png)
+
+![](./textures/water.png)
 
 ## Chatcommands
 
