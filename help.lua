@@ -1,4 +1,4 @@
-local what_is_this_uwu = {
+local what_is_this_owo = {
 	players = {},
 	players_set = {}
 }
@@ -16,7 +16,7 @@ local function split (str, sep)
 	return t
 end
 
-function what_is_this_uwu.split_item_name(item_name)
+function what_is_this_owo.split_item_name(item_name)
 	local splited = split(item_name, ':')
 
 	return splited[1], splited[2]
@@ -79,7 +79,7 @@ local char_width = {
 char_width[' '] = 5
 char_width['_'] = 9
 
-function what_is_this_uwu.destrange(str)
+function what_is_this_owo.destrange(str)
 	local is_strange = str:sub(1, 1) == '';
 	local ignore = true;
 
@@ -120,19 +120,19 @@ function string_to_pixels(str)
 	return size
 end
 
-function what_is_this_uwu.register_player(name)
-	if not what_is_this_uwu.players_set[name] then
-		what_is_this_uwu.players_set[name] = true
+function what_is_this_owo.register_player(name)
+	if not what_is_this_owo.players_set[name] then
+		what_is_this_owo.players_set[name] = true
 	end
 end
 
-function what_is_this_uwu.remove_player(name)
-	if what_is_this_uwu.players_set[name] then
-		what_is_this_uwu.players_set[name] = nil
+function what_is_this_owo.remove_player(name)
+	if what_is_this_owo.players_set[name] then
+		what_is_this_owo.players_set[name] = nil
 	end
 end
 
-function what_is_this_uwu.get_node_tiles(node_name)
+function what_is_this_owo.get_node_tiles(node_name)
 	local node = minetest.registered_nodes[node_name]
 
 	if not node then
@@ -142,7 +142,7 @@ function what_is_this_uwu.get_node_tiles(node_name)
 	local tiles = node.tiles
 	local tile, item_type
 
-	local mod_name, item_name = what_is_this_uwu.split_item_name(node_name)
+	local mod_name, item_name = what_is_this_owo.split_item_name(node_name)
 
 	if node.inventory_image ~= '' then
 		tile = node.inventory_image
@@ -185,7 +185,7 @@ function what_is_this_uwu.get_node_tiles(node_name)
 	return tile, item_type, minetest.registered_nodes[node_name]
 end
 
-function what_is_this_uwu.show_background(player, meta)
+function what_is_this_owo.show_background(player, meta)
 	player:hud_change(
 		meta:get_string('wit:background_left'),
 		'text',
@@ -203,9 +203,9 @@ function what_is_this_uwu.show_background(player, meta)
 	)
 end
 
-function what_is_this_uwu.show(player, meta, form_view, node_description, node_name, item_type, mod_name)
+function what_is_this_owo.show(player, meta, form_view, node_description, node_name, item_type, mod_name)
 	if meta:get_string('wit:pointed_thing') == 'ignore' then
-		what_is_this_uwu.show_background(player, meta)
+		what_is_this_owo.show_background(player, meta)
 	end
 
 	meta:set_string('wit:pointed_thing', node_name)
@@ -266,7 +266,7 @@ function what_is_this_uwu.show(player, meta, form_view, node_description, node_n
 	end
 end
 
-function what_is_this_uwu.unshow(player, meta)
+function what_is_this_owo.unshow(player, meta)
 	meta:set_string('wit:pointed_thing', 'ignore')
 
 	player:hud_change(
@@ -302,4 +302,4 @@ function what_is_this_uwu.unshow(player, meta)
 	)
 end
 
-return what_is_this_uwu
+return what_is_this_owo

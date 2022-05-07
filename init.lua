@@ -1,4 +1,4 @@
-local what_is_this_uwu = dofile(minetest.get_modpath('what_is_this_uwu')..'/help.lua')
+local what_is_this_owo = dofile(minetest.get_modpath('what_is_this_owo')..'/help.lua')
 
 minetest.register_on_joinplayer(function(player)
 	local meta = player:get_meta()
@@ -58,48 +58,48 @@ minetest.register_on_joinplayer(function(player)
 	meta:set_string('wit:pointed_thing', 'ignore')
 	meta:set_string('wit:item_type_in_pointer', 'node')
 
-	what_is_this_uwu.register_player(player, player:get_player_name())
+	what_is_this_owo.register_player(player, player:get_player_name())
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	what_is_this_uwu.remove_player(player:get_player_name())
+	what_is_this_owo.remove_player(player:get_player_name())
 end)
 
 minetest.register_on_punchnode(function(pos, node, player, pointed_thing)
-	if what_is_this_uwu.players_set[player:get_player_name()] then
+	if what_is_this_owo.players_set[player:get_player_name()] then
 		local meta = player:get_meta()
 		local node_name = node.name
 
 		if meta:get_string('wit:pointed_thing') ~= node_name then
-			local form_view, item_type, node_definition = what_is_this_uwu.get_node_tiles(node_name, meta)
+			local form_view, item_type, node_definition = what_is_this_owo.get_node_tiles(node_name, meta)
 
 			if not node_definition then
-				what_is_this_uwu.unshow(player, meta)
+				what_is_this_owo.unshow(player, meta)
 
 				return
 			end
 
-			local node_description = what_is_this_uwu.destrange(node_definition.description)
-			local mod_name, _ = what_is_this_uwu.split_item_name(node_name)
+			local node_description = what_is_this_owo.destrange(node_definition.description)
+			local mod_name, _ = what_is_this_owo.split_item_name(node_name)
 
-			what_is_this_uwu.show(player, meta, form_view, node_description, node_name, item_type, mod_name)
+			what_is_this_owo.show(player, meta, form_view, node_description, node_name, item_type, mod_name)
 		else
-			what_is_this_uwu.unshow(player, meta)
+			what_is_this_owo.unshow(player, meta)
 		end
 	end
 end)
 
-minetest.register_chatcommand('wituwu', {
+minetest.register_chatcommand('witowo', {
 	params = '',
-	description = 'Show and unshow the wituwu pop-up',
+	description = 'Show and unshow the witowo pop-up',
 	func = function(name)
 		local player = minetest.get_player_by_name(name)
 
-		if what_is_this_uwu.players_set[name] then
-			what_is_this_uwu.remove_player(name)
-			what_is_this_uwu.unshow(player, player:get_meta())
+		if what_is_this_owo.players_set[name] then
+			what_is_this_owo.remove_player(name)
+			what_is_this_owo.unshow(player, player:get_meta())
 		else
-			what_is_this_uwu.register_player(name)
+			what_is_this_owo.register_player(name)
 		end
 
 		return true, 'Option flipped'
