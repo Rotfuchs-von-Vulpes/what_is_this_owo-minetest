@@ -79,8 +79,18 @@ local char_width = {
 char_width[' '] = 5
 char_width['_'] = 9
 
+function is_strange(str)
+	for char in str:gmatch'.' do
+		if char == '' then
+			return true
+		end
+	end
+
+	return false
+end
+
 function what_is_this_owo.destrange(str)
-	local is_strange = str:sub(1, 1) == '';
+	local is_strange = is_strange(str);
 	local ignore = true;
 
 	local tem_str
@@ -145,20 +155,13 @@ function what_is_this_owo.get_node_tiles(node_name)
 	local mod_name, item_name = what_is_this_owo.split_item_name(node_name)
 
 	if node.inventory_image ~= '' then
-		tile = node.inventory_image
+		tile = node.inventory_image..'^[resize:16x16'
 		item_type = 'craft_item'
 	elseif item_name:sub(-2) == '_a' or item_name:sub(-2) == '_b' then
 		local temp = mod_name..':'..item_name:sub(1, -3)
 		local tile_temp = minetest.registered_craftitems[temp].inventory_image
 		
-		tile = tile_temp
-		item_type = 'craft_item'
-	elseif node.drawtype == 'liquid' or node.drawtype == 'flowingliquid' then
-		if type(tiles[1]) == 'table' then
-			tiles[1] = tiles[1].name
-		end
-
-		tile = tiles[1]..'^[resize:16x16'
+		tile = tile_temp..'^[resize:16x16'
 		item_type = 'craft_item'
 	else
 		if not tiles[3] then
@@ -178,7 +181,11 @@ function what_is_this_owo.get_node_tiles(node_name)
 			tiles[6] = tiles[6].name
 		end
 
-		tile = minetest.inventorycube(tiles[1], tiles[6], tiles[3])
+		tile = minetest.inventorycube(
+			tiles[1]..'^[resize:16x16',
+			tiles[6]..'^[resize:16x16',
+			tiles[3]..'^[resize:16x16'
+		)
 		item_type = 'node'
 	end
 
@@ -216,7 +223,6 @@ function what_is_this_owo.show(player, meta, form_view, node_description, node_n
 	else
 		size = string_to_pixels(mod_name)
 	end
-
 
 	player:hud_change(
 		meta:get_string('wit:background_middle'),

@@ -58,7 +58,7 @@ minetest.register_on_joinplayer(function(player)
 	meta:set_string('wit:pointed_thing', 'ignore')
 	meta:set_string('wit:item_type_in_pointer', 'node')
 
-	what_is_this_owo.register_player(player, player:get_player_name())
+	what_is_this_owo.register_player(player:get_player_name())
 end)
 
 minetest.register_on_leaveplayer(function(player)
