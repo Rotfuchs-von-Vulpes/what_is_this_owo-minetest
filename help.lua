@@ -133,12 +133,14 @@ end
 function inventorycube(img1, img2, img3)
 	if not img1 then return '' end
 
-	img2 = img2 or img1
-	img3 = img3 or img1
+	img1 = img1..'^[resize:16x16'
+
+	img2 = img2..'^[resize:16x16' or img1
+	img3 = img3..'^[resize:16x16' or img1
 	return "[inventorycube"..
-		"{"..img1:gsub("%^","&")..'^[resize:16x16'..
-		"{"..img2:gsub("%^","&")..'^[resize:16x16'..
-		"{"..img3:gsub("%^","&")..'^[resize:16x16'
+		"{"..img1:gsub("%^","&")..
+		"{"..img2:gsub("%^","&")..
+		"{"..img3:gsub("%^","&")
 end
 
 function what_is_this_owo.register_player(name)
@@ -161,7 +163,6 @@ function what_is_this_owo.get_node_tiles(node_name)
 	end
 
 	local tiles = node.tiles
-	local tile, item_type
 
 	local mod_name, item_name = what_is_this_owo.split_item_name(node_name)
 
