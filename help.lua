@@ -79,8 +79,18 @@ local char_width = {
 char_width[' '] = 5
 char_width['_'] = 9
 
+function is_strange(str)
+	for char in str:gmatch'.' do
+		if char == '' then
+			return true
+		end
+	end
+
+	return false
+end
+
 function what_is_this_uwu.destrange(str)
-	local is_strange = str:sub(1, 1) == '';
+	local is_strange = is_strange(str);
 	local ignore = true;
 
 	local tem_str
@@ -118,6 +128,19 @@ function string_to_pixels(str)
 	end)
 
 	return size
+end
+
+function inventorycube(img1, img2, img3)
+	if not img1 then return '' end
+
+	img1 = img1..'^[resize:16x16'
+
+	img2 = img2..'^[resize:16x16' or img1
+	img3 = img3..'^[resize:16x16' or img1
+	return "[inventorycube"..
+		"{"..img1:gsub("%^","&")..
+		"{"..img2:gsub("%^","&")..
+		"{"..img3:gsub("%^","&")
 end
 
 function what_is_this_uwu.register_player(player, name)
@@ -176,27 +199,24 @@ function what_is_this_uwu.get_node_tiles(node_name)
 	end
 
 	local tiles = node.tiles
-	local tile, item_type
 
 	local mod_name, item_name = what_is_this_uwu.split_item_name(node_name)
 
-	if node.inventory_image ~= '' then
-		tile = node.inventory_image
-		item_type = 'craft_item'
-	elseif item_name:sub(-2) == '_a' or item_name:sub(-2) == '_b' then
+	if node.inventory_image:sub(1, 14) == '[inventorycube' then
+
+		return node.inventory_image..'^[resize:146x146', 'node', minetest.registered_nodes[node_name]
+	elseif node.inventory_image ~= '' then
+
+		return node.inventory_image..'^[resize:16x16', 'craft_item', minetest.registered_nodes[node_name]
+	elseif item_name:sub(-2) == '_a' or item_name:sub(-2) == '_b' or item_name:sub(-2) == '_c' then
 		local temp = mod_name..':'..item_name:sub(1, -3)
 		local tile_temp = minetest.registered_craftitems[temp].inventory_image
-		
-		tile = tile_temp
-		item_type = 'craft_item'
-	elseif node.drawtype == 'liquid' or node.drawtype == 'flowingliquid' then
-		if type(tiles[1]) == 'table' then
-			tiles[1] = tiles[1].name
-		end
 
-		tile = tiles[1]..'^[resize:16x16'
-		item_type = 'craft_item'
+		return tile_temp..'^[resize:16x16', 'craft_item', minetest.registered_nodes[node_name]
 	else
+		if not tiles[1] then
+			return '', 'node', minetest.registered_nodes[node_name]
+		end
 		if not tiles[3] then
 			tiles[3] = tiles[1]
 		end
@@ -214,11 +234,8 @@ function what_is_this_uwu.get_node_tiles(node_name)
 			tiles[6] = tiles[6].name
 		end
 
-		tile = minetest.inventorycube(tiles[1], tiles[6], tiles[3])
-		item_type = 'node'
+		return inventorycube(tiles[1], tiles[6], tiles[3]), 'node', minetest.registered_nodes[node_name]
 	end
-
-	return tile, item_type, minetest.registered_nodes[node_name]
 end
 
 function what_is_this_uwu.show_background(player, meta)
