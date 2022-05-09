@@ -133,10 +133,13 @@ end
 function inventorycube(img1, img2, img3)
 	if not img1 then return '' end
 
-	img1 = img1..'^[resize:16x16'
+	img2 = img2 or img1
+	img3 = img3 or img1
 
-	img2 = img2..'^[resize:16x16' or img1
-	img3 = img3..'^[resize:16x16' or img1
+	img1 = img1..'^[resize:16x16'
+	img2 = img2..'^[resize:16x16'
+	img3 = img3..'^[resize:16x16'
+
 	return "[inventorycube"..
 		"{"..img1:gsub("%^","&")..
 		"{"..img2:gsub("%^","&")..
